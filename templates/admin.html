@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .navbar {
+            background-color: #333;
+            padding: 15px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            margin: 0 10px;
+            transition: background-color 0.3s ease; /* Smooth hover transition */
+        }
+        .navbar a:hover {
+            background-color: #555;
+        }
+        .container {
+            padding: 20px;
+        }
+        .metrics {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .metric {
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            width: 30%;
+        }
+        select {
+            padding: 5px 10px;
+            font-size: 16px;
+        }
+        .search-bar {
+            margin-bottom: 20px;
+        }
+        .search-bar input {
+            padding: 8px;
+            font-size: 16px;
+            width: 300px;
+        }
+        #userList {
+            margin-top: 20px;
+        }
+        .user-item {
+            padding: 10px;
+            margin: 5px 0;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+        #allocatePointsForm, #addUserForm, #viewUsers {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <div>
+            <a href="#" onclick="showAllocatePoints()">Allocate Points</a>
+            <a href="#" onclick="showAddUser()">Add User</a>
+            <a href="#" onclick="showViewUsers()">View Users</a>
+            <!-- New Dashboard submenu -->
+            <a href="http://127.0.0.1:5000/admin?#">Dashboard</a> <!-- Link to the main admin panel -->
+        </div>
+        <div>
+            <select id="timePeriod" onchange="updateMetrics()">
+                <option value="daily">Daily</option>
+                <option value="weekly">Weekly</option>
+                <option value="monthly">Monthly</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Allocate Points Section -->
+        <div id="allocatePointsForm">
+            <h2>Allocate Points</h2>
+            
+            <!-- Search bar -->
+            <div class="search-bar">
+                <input type="text" id="searchQuery" placeholder="Search user by ID or name" oninput="searchUsers()">
+            </div>
+
+            <!-- User list -->
+            <div id="userList"></div>
+
+            <!-- Allocate Points Form -->
+            <form id="pointsForm">
+                <label for="user_id">User ID:</label>
+                <input type="number" id="user_id" readonly><br><br>
+
+                <label for="transaction_id">Transaction ID:</label>
+                <input type="text" id="transaction_id" required><br><br>
+
+
+                <label for="points">Points to Add:</label>
+                <input type="number" id="points" required step="0.01"><br><br>
+
+                <label for="transaction_type">Transaction Type:</label>
+                <select id="transaction_type">
+                    <option value="add">Add Points</option>
+                    <option value="remove">Remove Points</option>
+                </select><br><br>
+
+                <label for="admin_key">Admin Key:</label>
+                <input type="password" id="admin_key" required><br><br>
+
+                <button type="submit">Submit</button>
+            </form>
+
+            <div id="responseMessage"></div>
+        </div>
+
+        <!-- Add User Section -->
+        <div id="addUserForm">
+            <h2>Add User</h2>
+            <form id="addUserFormDetails">
+                <label for="new_user_id">User ID:</label>
+                <input type="number" id="new_user_id" required><br><br>
+
+                <label for="new_user_email">Email:</label>
+                <input type="email" id="new_user_email" required><br><br>
+
+                <label for="new_user_name">Name:</label>
+                <input type="text" id="new_user_name" required><br><br>
+
+                <label for="new_user_password">Password:</label>
+                <input type="password" id="new_user_password" required><br><br>
+
+                <label for="add_user_admin_key">Admin Key:</label>
+                <input type="password" id="add_user_admin_key" required><br><br>
+
+                <button type="submit">Add User</button>
+            </form>
+
+            <div id="addUserResponseMessage"></div>
+        </div>
+
+        <!-- View Users Section -->
+        <!-- View Users Section -->
+<div id="viewUsers" style="display: none;">
+    <h2>View Users</h2>
+
+    <!-- Bar Graph Container (Users Created) -->
+    <div class="chart-container" style="margin-bottom: 30px;">
+        <canvas id="barChart"></canvas>
+    </div>
+
+    <!-- Pie Chart Container (User Stats) -->
+    <div class="chart-container" style="margin-bottom: 30px;">
+        <canvas id="pieChart"></canvas>
+    </div>
+
+    <!-- Toggle Button for Time Period -->
+    <div class="toggle-container">
+        <button id="toggleButton">Monthly Stats</button>
+    </div>
+</div>
+
+
+        <div id="metrics" class="metrics">
+            <div class="metric" id="userCount">Users: 0</div>
+            <div class="metric" id="pointsAdded">Points Added: 0</div>
+            <div class="metric" id="pointsRemoved">Points Removed: 0</div>
+        </div>
+    </div>
+
+    <script>
+        // Show and hide sections
+        function showAllocatePoints() {
+            document.getElementById('allocatePointsForm').style.display = 'block';
+            document.getElementById('addUserForm').style.display = 'none';
+            document.getElementById('viewUsers').style.display = 'none';
+        }
+
+        function showAddUser() {
+            document.getElementById('addUserForm').style.display = 'block';
+            document.getElementById('allocatePointsForm').style.display = 'none';
+            document.getElementById('viewUsers').style.display = 'none';
+        }
+
+        function showViewUsers() {
+    document.getElementById('viewUsers').style.display = 'block';
+    document.getElementById('allocatePointsForm').style.display = 'none';
+    document.getElementById('addUserForm').style.display = 'none';
+
+    // Fetch data for charts when View Users is shown
+    fetchData();
+}
+
+        
+
+        // Search users
+        function searchUsers() {
+            const query = document.getElementById('searchQuery').value;
+
+            $.ajax({
+                url: `http://127.0.0.1:5000/api/search-users?query=${query}`,
+                method: 'GET',
+                success: function(response) {
+                    const userList = document.getElementById('userList');
+                    userList.innerHTML = '';
+                    if (response.users && response.users.length > 0) {
+                        response.users.forEach(function(user) {
+                            const userDiv = document.createElement('div');
+                            userDiv.classList.add('user-item');
+                            userDiv.textContent = `ID: ${user.id}, Name: ${user.name}`;
+                            userDiv.onclick = function() {
+                                document.getElementById('user_id').value = user.id;
+                                document.getElementById('pointsForm').style.display = 'block';
+                            };
+                            userList.appendChild(userDiv);
+                        });
+                    } else {
+                        userList.innerHTML = '<div>No users found.</div>';
+                    }
+                },
+                error: function() {
+                    alert('Error searching users.');
+                }
+            });
+        }
+
+        // Submit allocate points form
+        document.getElementById('pointsForm').addEventListener('submit', function (event) {
+    event.preventDefault();
+
+    const user_id = document.getElementById('user_id').value;
+    const points = document.getElementById('points').value;
+    const transaction_id = document.getElementById('transaction_id').value;
+    const admin_key = document.getElementById('admin_key').value;
+
+    console.log('user_id:', user_id);
+    console.log('points:', points);
+    console.log('transaction_id:', transaction_id); // This should be a string now
+    console.log('admin_key:', admin_key);
+    console.log('Transaction Type:', transaction_type);
+
+        // Validate that transaction_id is not empty
+    if (!transaction_id || transaction_id === '') {
+        alert('Transaction ID is required');
+        return; // Exit if transaction_id is missing
+}
+
+        // Validate other required fields (user_id, points, admin_key)
+    if (!user_id || !points || !admin_key) {
+        alert('All fields are required');
+        return; // Exit if any of the fields are missing
+}
+
+    $.ajax({
+        url: 'http://127.0.0.1:5000/api/allocate-points',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({
+            user_id: user_id,
+            points: points,
+            transaction_id: transaction_id,
+            admin_key: admin_key
+        }),
+        success: function (response) {
+            alert(response.message);
+            document.getElementById('pointsForm').reset();
+        },
+        error: function (xhr) {
+            alert(xhr.responseJSON.error || "Unknown error");
+        }
+    });
+});
+
+        // Submit add user form
+document.getElementById('addUserFormDetails').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const user_id = document.getElementById('new_user_id').value;
+    const email = document.getElementById('new_user_email').value;
+    const name = document.getElementById('new_user_name').value;
+    const password = document.getElementById('new_user_password').value;
+    const admin_key = document.getElementById('add_user_admin_key').value;
+
+    $.ajax({
+        url: 'http://127.0.0.1:5000/api/add-user',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({
+            user_id: user_id,
+            email: email,
+            name: name,
+            password: password,
+            admin_key: admin_key
+        }),
+        success: function(response) {
+            document.getElementById('addUserResponseMessage').textContent = response.message;
+
+            // Clear the fields after user is created successfully
+            document.getElementById('addUserFormDetails').reset();
+            document.getElementById('addUserResponseMessage').style.color = 'green';  // Optional, for success message styling
+        },
+        error: function(xhr) {
+            document.getElementById('addUserResponseMessage').textContent = xhr.responseJSON.error;
+            document.getElementById('addUserResponseMessage').style.color = 'red';  // Optional, for error message styling
+        }
+    });
+});
+ // Default time period (daily, weekly, monthly, yearly)
+ let currentStatsType = 'monthly';
+
+// Function to fetch and update bar and pie charts
+function fetchData() {
+    $.get(`http://127.0.0.1:5000/api/users-created-per-month`, function(response) {
+        updateBarGraph(response.months, response.user_counts);
+    });
+
+    $.get(`http://127.0.0.1:5000/api/user-stats?period=${currentStatsType}`, function(response) {
+        updatePieChart(response.new_users, response.deleted_users, response.current_users);
+    });
+}
+
+// Initialize Bar Chart
+const barChartCtx = document.getElementById('barChart').getContext('2d');
+let barChart = new Chart(barChartCtx, {
+    type: 'bar',
+    data: {
+        labels: [],
+        datasets: [{
+            label: 'Users Created',
+            data: [],
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+// Initialize Pie Chart
+const pieChartCtx = document.getElementById('pieChart').getContext('2d');
+let pieChart = new Chart(pieChartCtx, {
+    type: 'pie',
+    data: {
+        labels: ['New Users', 'Deleted Users', 'Current Users'],
+        datasets: [{
+            data: [0, 0, 0],
+            backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(255, 159, 64, 0.2)', 'rgba(54, 162, 235, 0.2)'],
+            borderColor: ['rgba(255, 99, 132, 1)', 'rgba(255, 159, 64, 1)', 'rgba(54, 162, 235, 1)'],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true
+    }
+});
+
+// Update Bar Chart
+function updateBarGraph(months, userCounts) {
+    barChart.data.labels = months;
+    barChart.data.datasets[0].data = userCounts;
+    barChart.update();
+}
+
+// Update Pie Chart
+function updatePieChart(newUsers, deletedUsers, currentUsers) {
+    pieChart.data.datasets[0].data = [newUsers, deletedUsers, currentUsers];
+    pieChart.update();
+}
+
+// Toggle Button to switch time periods
+$('#toggleButton').click(function() {
+    if (currentStatsType === 'monthly') {
+        currentStatsType = 'daily';
+        $('#toggleButton').text('Daily Stats');
+    } else if (currentStatsType === 'daily') {
+        currentStatsType = 'weekly';
+        $('#toggleButton').text('Weekly Stats');
+    } else if (currentStatsType === 'weekly') {
+        currentStatsType = 'yearly';
+        $('#toggleButton').text('Yearly Stats');
+    } else {
+        currentStatsType = 'monthly';
+        $('#toggleButton').text('Monthly Stats');
+    }
+    fetchData();
+});
+
+// Initial data fetch
+$(document).ready(fetchData);
+
+
+
+
+    </script>
+
+</body>
+</html> 

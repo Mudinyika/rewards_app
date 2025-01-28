@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Point Allocation System</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to right, #6dd5ed, #2193b0);
+            color: #333;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            padding: 1rem 2rem;
+            text-align: center;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: row;
+            margin: 2rem;
+        }
+
+        .form-section {
+            width: 50%;
+            padding: 1rem;
+        }
+
+        .info-section {
+            width: 50%;
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-left: 1rem;
+        }
+
+        h1 {
+            text-align: center;
+            color: #444;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 0.5rem;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #2193b0;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background-color: #6dd5ed;
+        }
+
+        .info-section h2 {
+            margin-top: 0;
+        }
+
+        .info-section p {
+            margin: 0.5rem 0;
+        }
+
+        .footer {
+            margin-top: 2rem;
+            text-align: center;
+            font-size: 0.9rem;
+            color: white;
+            background: #333;
+            padding: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Point Allocation System</h1>
+</header>
+<h3 id="operator-name">Operator: {{ operator_name }}</h3>
+<p id="till-number">Till Number: {{ till_number }}</p>
+<p id="role">Role: {{ role }}</p>
+
+<div class="container">
+    <!-- Input Form Section -->
+    <div class="form-section">
+        <h1>Allocate Points</h1>
+    
+        <form id="pointForm">
+
+            <div class="form-group">
+                <label for="userId">User ID</label>
+                <input type="text" id="userId" placeholder="Enter User ID" oninput="fetchUserDetails()">
+            </div>
+
+            <div class="form-group">
+                <label for="transactionId">Transaction ID</label>
+                <input type="text" id="transactionId" placeholder="Enter Transaction ID">
+            </div>
+
+            <div class="form-group">
+                <label for="points">Points</label>
+                <input type="number" id="points" placeholder="Enter Points" step="0.01" inputmode="decimal">
+
+
+            </div>
+
+            <div class="form-group">
+                <label for="adminKey">Admin Key</label>
+                <input type="text" id="adminKey" placeholder="Enter Admin Key">
+            </div>
+            <div class="form-group">
+                <label for="cardSwipe">Swipe Card</label>
+                <input type="text" id="cardSwipe" placeholder="Swipe card here..." style="width: 100%;" oninput="processCardSwipe()" autocomplete="off">
+            </div>
+            
+            <button type="button" onclick="allocatePoints()">Allocate Points</button> |
+            <button onclick="window.location.href='/logout'">Logout</button>
+        </form>
+    </div>
+    <div class="form-group">
+        <label for="transactionType">Transaction Type</label>
+        <div>
+            <input type="radio" id="addPoints" name="transactionType" value="add" checked>
+            <label for="addPoints">Add Points</label>
+            <input type="radio" id="removePoints" name="transactionType" value="remove">
+            <label for="removePoints">Remove Points</label>
+        </div>
+    </div>
+
+    <!-- User Information Section -->
+    <div class="info-section" id="userInfo">
+        <h2>User Information</h2>
+        <p id="userName">Name: <span>N/A</span></p>
+        <p id="userPoints">Total Points: <span>N/A</span></p>
+        <p id="lastTransaction">Last Transaction: <span>N/A</span></p>
+    </div>
+</div>
+
+<footer class="footer">
+    <p>&copy; 2025 Point Allocation System. All Rights Reserved.</p>
+</footer>
+
+<script>
+    async function processCardSwipe() {
+        const cardInput = document.getElementById('cardSwipe');
+        const cardData = cardInput.value.trim();
+
+        if (!cardData) return;
+
+        try {
+            const response = await fetch('/api/card-swipe', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ card_data: cardData }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                // Populate user details on successful card swipe
+                document.getElementById('userId').value = data.user_id;
+                document.getElementById('userName').innerHTML = `Name: <span>${data.name}</span>`;
+                document.getElementById('userPoints').innerHTML = `Total Points: <span>${data.points}</span>`;
+                document.getElementById('lastTransaction').innerHTML = `Last Transaction: <span>${data.last_transaction || 'N/A'}</span>`;
+                cardInput.value = "";  // Clear the card input field
+            } else {
+                alert(`Error: ${data.error}`);
+                cardInput.value = "";  // Clear the card input field
+            }
+        } catch (error) {
+            console.error('Error processing card swipe:', error);
+            cardInput.value = "";  // Clear the card input field
+        }
+    }
+
+    async function fetchUserDetails() {
+        const userId = document.getElementById('userId').value.trim();
+        if (!userId) {
+            resetUserInfo();
+            return;
+        }
+
+        try {
+            const response = await fetch(`/api/users/${userId}`);
+            const data = await response.json();
+
+            if (response.ok) {
+                document.getElementById('userName').innerHTML = `Name: <span>${data.name}</span>`;
+                document.getElementById('userPoints').innerHTML = `Total Points: <span>${data.points}</span>`;
+                document.getElementById('lastTransaction').innerHTML = `Last Transaction: <span>${data.last_transaction || 'N/A'}</span>`;
+            } else {
+                alert(`Error fetching user details: ${data.error}`);
+                resetUserInfo();
+            }
+        } catch (error) {
+            console.error('Error fetching user details:', error);
+            resetUserInfo();
+        }
+    }
+
+    function resetUserInfo() {
+        document.getElementById('userName').innerHTML = 'Name: <span>N/A</span>';
+        document.getElementById('userPoints').innerHTML = 'Total Points: <span>N/A</span>';
+        document.getElementById('lastTransaction').innerHTML = 'Last Transaction: <span>N/A</span>';
+    }
+
+    async function allocatePoints() {
+        const userId = document.getElementById('userId').value.trim();
+        const transactionId = document.getElementById('transactionId').value.trim();
+        const points = document.getElementById('points').value.trim();
+        const adminKey = document.getElementById('adminKey').value.trim();
+        const transactionType = document.querySelector('input[name="transactionType"]:checked').value;
+
+        if (!userId || !transactionId || !points || !adminKey) {
+            alert('Please fill out all fields.');
+            return;
+        }
+
+        try {
+            const payload = {
+                user_id: userId,
+                transaction_id: transactionId,
+                points: parseInt(points, 10),
+                admin_key: adminKey,
+                transaction_type: transactionType
+            };
+
+            const response = await fetch('/api/allocate-points', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                alert(data.message);
+                document.getElementById('pointForm').reset();
+                resetUserInfo();
+            } else {
+                alert(`Error: ${data.error}`);
+            }
+        } catch (error) {
+            console.error('Error allocating points:', error);
+        }
+    }
+
+    async function fetchOperatorInfo() {
+        try {
+            const response = await fetch('/api/operator_info');
+            const data = await response.json();
+            if (data.operator_name) {
+                document.getElementById('operator-name').innerHTML = `Operator: ${data.operator_name}`;
+                document.getElementById('till-number').innerHTML = `Till Number: ${data.till_number}`;
+                document.getElementById('role').innerHTML = `Role: ${data.role}`;
+            }
+        } catch (error) {
+            console.error('Error fetching operator info:', error);
+        }
+    }
+
+    // Call the function when the page loads
+    fetchOperatorInfo();
+
+</script>
+
+</body>
+</html>
