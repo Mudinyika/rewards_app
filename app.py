@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 from flask import Flask, jsonify, request, render_template, url_for, session, redirect
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
@@ -18,54 +17,12 @@ ADMIN_KEY = "admin123"  # Replace with your desired admin key
 db = SQLAlchemy(app)
 
 CORS(app)
-=======
-from flask import Flask, jsonify, request, render_template
-import pymysql
-from flask_cors import CORS
-from werkzeug.security import generate_password_hash, check_password_hash
-from decimal import Decimal
-from flask_sqlalchemy import SQLAlchemy
-from flask import Flask
-from app import db
-
-# Admin authentication key
-ADMIN_KEY = "admin123"  # Replace with your desired admin key
->>>>>>> 86da65f8552cbf70dcabf6fb62125ad3cad33e82
-
 
 # Database connection details
 DB_HOST = 'localhost'
 DB_USER = 'root'
 DB_PASSWORD = 'admin123'  # Change this if you have a password
 DB_NAME = 'user_points_system'
-
-<<<<<<< HEAD
-from flask import Flask, jsonify, request, render_template, url_for, session, redirect
-from flask_sqlalchemy import SQLAlchemy
-from flask_cors import CORS
-from werkzeug.security import generate_password_hash, check_password_hash
-import pymysql
-from decimal import Decimal
-
-# Initialize your Flask app and the database object
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:my_password@localhost/user_points_system'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.secret_key = 'dev_secret_key_1234567890'
-
-# Admin authentication key
-ADMIN_KEY = "admin123"  # Replace with your desired admin key
-db = SQLAlchemy(app)
-
-CORS(app)
-
-
-# Database connection details
-DB_HOST = 'localhost'
-DB_USER = 'root'
-DB_PASSWORD = 'admin123'  # Change this if you have a password
-DB_NAME = 'user_points_system'
-
 
 @app.route('/')
 def index():
@@ -180,13 +137,6 @@ def login():
         return jsonify({"success": False, "error": "Insufficient privileges"}), 403
     return jsonify({"success": False, "error": "Invalid credentials"}), 401
 
-=======
-app = Flask(__name__)
-CORS(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:my_password@localhost/user_points_system'
-db = SQLAlchemy(app)
->>>>>>> 86da65f8552cbf70dcabf6fb62125ad3cad33e82
-
 def get_db_connection():
     return pymysql.connect(host=DB_HOST, user=DB_USER, password=DB_PASSWORD, database=DB_NAME)
 
@@ -208,17 +158,9 @@ def create_app():
 
     return app
 
-from decimal import Decimal
 
-
-<<<<<<< HEAD
-  
-@app.route('/api/allocate-points', methods=['POST'])
-def allocate_points_api():
-=======
 @app.route('/api/allocate-points', methods=['POST'])
 def allocate_points():
->>>>>>> 86da65f8552cbf70dcabf6fb62125ad3cad33e82
     data = request.get_json()
     user_id = data.get('user_id')
     points = data.get('points')  # Points from request, should be a float or decimal
@@ -228,7 +170,6 @@ def allocate_points():
 
     if admin_key != ADMIN_KEY:
         return jsonify({"error": "Invalid admin key"}), 403
-<<<<<<< HEAD
     
     if not transaction_id:
         return jsonify({'error': 'Transaction ID is required'}), 400
@@ -241,11 +182,10 @@ def allocate_points():
     
     if not transaction_type:
         return jsonify({'error': 'Transaction ID is required'}), 407
-=======
 
     if not user_id or points is None or not transaction_type or not transaction_id:
         return jsonify({"error": "Missing required fields"}), 400
->>>>>>> 86da65f8552cbf70dcabf6fb62125ad3cad33e82
+
 
     try:
         # Convert points to a Decimal to ensure consistency
@@ -297,12 +237,6 @@ def allocate_points():
         cursor.close()
         connection.close()
 
-<<<<<<< HEAD
-=======
-
-
-
->>>>>>> 86da65f8552cbf70dcabf6fb62125ad3cad33e82
 @app.route('/api/user-stats', methods=['GET'])
 def user_stats():
     period = request.args.get('period', 'monthly')  # Default to monthly
@@ -512,7 +446,6 @@ def add_user():
         if connection:
             connection.close()
 
-<<<<<<< HEAD
 @app.route('/api/users/<int:user_id>', methods=['GET'])
 def get_user_details(user_id):
     try:
@@ -553,10 +486,6 @@ def get_user_details(user_id):
         cursor.close()
         connection.close()           
             
-=======
-
-
->>>>>>> 86da65f8552cbf70dcabf6fb62125ad3cad33e82
 @app.route('/admin')
 def admin():
     return render_template('admin.html')
@@ -573,9 +502,7 @@ class Points(db.Model):
     user_id = db.Column(db.Integer, nullable=False)
     points = db.Column(db.Float, nullable=False)
     transaction_id = db.Column(db.String(255))
-<<<<<<< HEAD
     
-
 # Route to add points
 @app.route('/api/card-swipe', methods=['POST'])
 def handle_card_swipe():
@@ -635,29 +562,6 @@ def handle_card_swipe():
         cursor.close()
         connection.close()
 
-@app.route('/allocate_points', methods=['POST'])
-def allocate_points():
-    data = request.get_json()
-    till_number = data.get('till_number')
-    operator_name = data.get('operator_name')
-    password = data.get('password')
-
-    # Validate operator credentials (login)
-    if validate_till_operator(till_number, operator_name, password):
-        # Check the operator's role
-        role = get_operator_role(till_number, operator_name)
-
-        if role == 'user' or role == 'admin':
-            # Set session for logged-in user
-            session['username'] = operator_name
-            session['role'] = role
-
-            # Redirect to allocate points page
-            return jsonify({"success": True, "role": role, "redirect": "/allocate_points_page"})
-        else:
-            return jsonify({"success": False, "error": "Insufficient privileges"}), 403
-    else:
-        return jsonify({"success": False, "error": "Invalid credentials"}), 401
 
 # Route for the allocate points page
 @app.route('/allocate_points_page', methods=['GET'])
@@ -672,8 +576,6 @@ def allocate_points_page():
     
     return render_template('AllocatePoints.html', till_number=till_number, operator_name=operator_name, role=role)
 
-
-from flask import session, redirect, url_for
 
 @app.route('/api/operator_info', methods=['GET'])
 def get_operator_info():
@@ -1379,11 +1281,6 @@ def logout():
     session.clear()
     # Redirect to the login form (index route)
     return redirect(url_for('index'))
-
-=======
-
-# Route to add points
->>>>>>> 86da65f8552cbf70dcabf6fb62125ad3cad33e82
 
 
 if __name__ == "__main__":
