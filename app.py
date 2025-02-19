@@ -48,9 +48,7 @@ if not db_uri:
 # Initialize your Flask app and the database object
 app = Flask(__name__, static_folder="react_build")
 
-app.config['SESSION_COOKIE_SECURE'] = True  # Ensure cookies are sent over HTTPS
-app.config['SESSION_COOKIE_HTTPONLY'] = True  # Prevent JavaScript access
-app.config['SESSION_COOKIE_SAMESITE'] = 'None'  # Allow cross-site cookies
+
 app.config.from_object(config[env])  # ✅ Load production or development config
 
 # ✅ Initialize Flask Extensions
