@@ -1,0 +1,127 @@
+.main-content {
+    padding-left: 50px; /* Adjust as needed */
+}
+
+.container {
+    margin-left: 30px; /* Push content slightly to the right */
+}
+
+
+/* 🌟 Two-Column Layout */
+.allocate-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    height: calc(100vh - 50px); /* Ensure it doesn't exceed the viewport height */;
+    padding: 20px;
+    background: linear-gradient(135deg, #1e3c72, #2a5298); /* ✅ Matching ViewUser Theme */
+    color: white;
+    gap: 20px;
+    overflow: hidden; /* Prevent unnecessary scrolling */
+}
+
+/* ✅ Left Column - Form Section */
+.allocate-form {
+    flex: 1;
+    max-width: 350px;
+    background: rgba(255, 255, 255, 0.1); /* ✅ Glass Effect */
+    padding: 20px;
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+/* 📝 Input Fields */
+.allocate-form label {
+    font-size: 1rem;
+    font-weight: bold;
+    display: block;
+    margin-top: 10px;
+    color: var(--color-white);
+}
+
+.allocate-form input,
+.allocate-form select {
+    width: 100%;
+    padding: 12px;
+    margin-top: 5px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    background: rgba(255, 255, 255, 0.2); /* ✅ Glass effect */
+    color: var(--color-white);
+    text-align: center;
+}
+
+/* Remove number input arrows */
+
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* 🔘 Radio Button Section */
+.radio-group {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+/* 🚀 Allocate Button */
+.allocate-button {
+    width: 100%;
+    background: #ffcc00;
+    color: black;
+    font-weight: bold;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 1rem;
+    margin-top: 15px;
+}
+
+.allocate-button:hover {
+    background: #ffdb4d;
+}
+
+/* ✅ Right Column - User Info */
+.user-info-box {
+    flex: 2;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    width: 100%;
+}
+
+.user-info-box h2 {
+    text-align: center;
+    margin-bottom: 15px;
+    font-size: 1.5rem;
+}
+
+/* 🔔 Modal Styling */
+.dialog-overlay {
+    background: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    inset: 0;
+}
+
+.dialog-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 300px;
+    text-align: center;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}

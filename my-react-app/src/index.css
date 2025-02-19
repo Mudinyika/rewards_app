@@ -1,0 +1,180 @@
+:root {
+  --color-dark-blue: #1e3a8a;
+  --color-white: #ffffff;
+  --color-gray: #9ca3af;
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f9fafb;
+  color: var(--color-gray);
+  height: 100vh;
+  display: flex;
+}
+
+/* Sidebar container */
+.app-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw; /* ✅ Ensures full width */
+}
+
+
+/* ✅ Keeps Sidebar Fixed */
+.sidebar {
+  width: 16rem;
+  background-color: var(--color-dark-blue);
+  color: var(--color-white);
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  padding: 20px;
+  overflow-y: auto; /* ✅ Prevents cut-off menus */
+}
+
+
+/* ✅ Main Content Adjusts Properly */
+.main-content {
+  flex: 1;
+  margin-left: 16rem; /* ✅ Pushes content to the right, so it doesn't overlap */
+  padding: 20px;
+  overflow-y: auto;
+  height: 100vh;
+  width: calc(100% - 16rem); /* ✅ Ensures it takes remaining space */
+  box-sizing: border-box; /* ✅ Prevents extra width causing overlap */
+}
+
+
+
+/* Sidebar item styles */
+.nav-item {
+  padding: 1rem;
+  color: var(--color-white);
+  text-decoration: none;
+  font-size: 1rem;
+  transition: background-color 0.3s;
+  border-radius: 4px;
+  display: block;
+}
+
+/* Sidebar item hover effect */
+.nav-item:hover {
+  background-color: #1d4ed8;
+}
+
+/* Submenu for Users (hidden by default, visible on click) */
+.submenu {
+  padding-left: 1rem; /* Indent submenu items */
+}
+
+.submenu .nav-item {
+  padding-left: 1.5rem; /* Indent submenu items further */
+}
+
+/* Utility classes */
+.text-white {
+  color: var(--color-white);
+}
+
+.text-gray-300 {
+  color: #d1d5db;
+}
+
+.hover\:bg-gray-700:hover {
+  background-color: #374151;
+}
+
+.hover\:text-white:hover {
+  color: var(--color-white);
+}
+
+/* 🌟 Global Modal Styling - Ensures it Always Appears on Top */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(30, 60, 114, 0.9); /* ✅ Matches dark blue theme */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999; /* ✅ Highest layer */
+  backdrop-filter: blur(10px); /* ✅ Glassmorphism effect */
+}
+
+/* 🎯 Modal Content - Styled to Match Theme */
+.modal-content {
+  background: rgba(255, 255, 255, 0.1); /* ✅ Semi-transparent background */
+  padding: 25px;
+  border-radius: 12px;
+  width: 350px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  z-index: 100000; /* ✅ Above everything */
+  color: white;
+  font-size: 1.1rem;
+  font-weight: bold;
+  backdrop-filter: blur(12px); /* ✅ Soft blur effect */
+  border: 2px solid rgba(255, 255, 255, 0.3); /* ✅ Subtle border */
+}
+
+/* ✅ Close Button - Matches UI */
+.modal-close {
+  background: #ffcc00;
+  color: black;
+  border: none;
+  padding: 12px 18px;
+  cursor: pointer;
+  border-radius: 8px;
+  font-weight: bold;
+  margin-top: 15px;
+  font-size: 1rem;
+  transition: 0.3s;
+}
+
+.modal-close:hover {
+  background: #ffdb4d;
+}
+
+/* ✅ Disable Background Interaction */
+body.modal-open {
+  overflow: hidden; /* ✅ Prevents scrolling */
+  pointer-events: none; /* ✅ Stops background clicks */
+}
+
+/* ✅ Allow Interaction with Modal */
+.modal-content {
+  pointer-events: auto;
+}
+
+/* ❌ Hide modal when not active */
+.modal.hide {
+  display: none;
+}
+
+
+.dialog-overlay {
+  background: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  inset: 0;
+}
+
+.dialog-content {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 300px;
+  text-align: center;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+
+
+

@@ -1,0 +1,147 @@
+/* 🌟 Two-Column Layout */
+.admin-till-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh; /* 🔥 Ensures background covers full page */
+    padding: 30px 50px; /* Adjust padding as needed */
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    color: white;
+    gap: 20px;
+    overflow: hidden; /* Prevents accidental scroll cutting */
+}
+
+
+
+/* ✅ Left Column - Form Section */
+.admin-form {
+    flex: 1;
+    max-width: 350px;
+    background: rgba(255, 255, 255, 0.1); /* ✅ Glass Effect */
+    padding: 20px;
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+/* 📝 Input Fields */
+.admin-form label {
+    font-size: 1rem;
+    font-weight: bold;
+    display: block;
+    margin-top: 10px;
+    color: var(--color-white);
+}
+
+.admin-form input,
+.admin-form select {
+    width: 100%;
+    padding: 12px;
+    margin-top: 5px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    background: rgba(255, 255, 255, 0.2); /* ✅ Glass effect */
+    color: var(--color-white);
+    text-align: center;
+}
+
+/* 🔘 Select Dropdown */
+.admin-form select {
+    cursor: pointer;
+}
+
+/* 🚀 Submit Button */
+.submit-button {
+    width: 100%;
+    background: #ffcc00;
+    color: black;
+    font-weight: bold;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 1rem;
+    margin-top: 15px;
+}
+
+.submit-button:hover {
+    background: #ffdb4d;
+}
+
+/* ✅ Right Column - User List */
+.user-list {
+    flex: 2;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    width: 100%;
+}
+
+/* 🎯 User Table */
+.user-list table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.user-list th,
+.user-list td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.user-list th {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* 🛠 Edit & Delete Buttons */
+.action-buttons button {
+    margin: 5px;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.edit-button {
+    background: #4caf50;
+    color: white;
+}
+
+.edit-button:hover {
+    background: #45a049;
+}
+
+.delete-button {
+    background: #f44336;
+    color: white;
+}
+
+.delete-button:hover {
+    background: #d32f2f;
+}
+
+/* 🔔 Modal Styling */
+.dialog-overlay {
+    background: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    inset: 0;
+}
+
+.dialog-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 300px;
+    text-align: center;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}

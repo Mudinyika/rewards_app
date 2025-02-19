@@ -1,0 +1,99 @@
+/* 🌟 Two-Column Layout */
+.view-user-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    height: 100vh;
+    padding: 50px;
+    background: linear-gradient(135deg, #1e3c72, #2a5298); /* Matching theme */
+    color: white;
+    gap: 20px;
+  }
+  
+  /* ✅ Left Column - Search Field */
+  .search-container {
+    flex: 1;
+    max-width: 300px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+  }
+  
+  .search-container input {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    outline: none;
+    font-size: 1rem;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    text-align: center;
+  }
+  
+  .search-container input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+  }
+  
+  /* ✅ Right Column - Search Results & User Details */
+  .results-container {
+    flex: 2;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    width: 100%;
+  }
+  
+  /* 🎯 Search Results */
+  .search-results ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .search-results li {
+    margin-bottom: 10px;
+  }
+  
+  .search-results button {
+    width: 100%;
+    padding: 10px;
+    background: #ffcc00;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+  }
+  
+  .search-results button:hover {
+    background: #ffdb4d;
+  }
+  
+  /* ✅ User Details Card */
+  .user-details {
+    margin-top: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 12px;
+    width: 100%;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .user-details p {
+    font-size: 1rem;
+    margin: 8px 0;
+    color: #fff;
+  }
+  
+  .error {
+    color: #ff4d4d;
+    font-size: 0.9rem;
+  }
+  

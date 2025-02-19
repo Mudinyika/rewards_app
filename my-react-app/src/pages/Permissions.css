@@ -1,0 +1,110 @@
+/* 🌟 Container */
+.permissions-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px;
+    height: 100vh;
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    color: white;
+}
+
+/* 🔹 Table Styling */
+.permissions-table {
+    width: 80%;
+    max-width: 800px;
+    border-collapse: collapse;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 20px;
+}
+
+.permissions-table th, .permissions-table td {
+    padding: 15px;
+    text-align: center;
+}
+
+.permissions-table th {
+    background: rgba(255, 255, 255, 0.2);
+    font-weight: bold;
+}
+
+.permissions-table tr:nth-child(even) {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* 🎯 Select Dropdown */
+select {
+    padding: 8px;
+    border-radius: 6px;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+}
+
+/* 🚀 Pagination Controls */
+.pagination-controls {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.pagination-controls button {
+    padding: 10px 15px;
+    background: #ffcc00;
+    color: black;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.pagination-controls button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+/* 🔔 Modal */
+/* 🔥 Ensures Modal Covers Everything */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.7); /* ✅ Darkens background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* ✅ Ensures it's above everything */
+}
+
+/* 🎯 Modal Box */
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 350px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    z-index: 10000; /* ✅ Even higher than overlay */
+}
+
+/* 🔘 Disable Background Interaction */
+body.modal-open {
+    overflow: hidden; /* ✅ Prevents scrolling */
+}
+
+
+.modal-close {
+    background: red;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    margin-top: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}

@@ -1,0 +1,76 @@
+/* 🌟 Centering the form */
+.add-user-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #1e3c72, #2a5298); /* Cool dark blue */
+    color: white;
+    text-align: center;
+  }
+  
+  /* 📌 Styled Form */
+  .add-user-form {
+    background: rgba(255, 255, 255, 0.1); /* Glass effect */
+    backdrop-filter: blur(10px);
+    padding: 2rem;
+    border-radius: 12px;
+    width: 350px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* ✍️ Input Fields */
+  .add-user-form input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 8px;
+    outline: none;
+    font-size: 1rem;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+  }
+  
+  /* Placeholder Color */
+  .add-user-form input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+  }
+  
+  /* 🚀 Button */
+  .add-user-button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    background: #ffcc00;
+    color: black;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  
+  .add-user-button:hover {
+    background: #ffdb4d;
+  }
+  
+  /* ✅ Success/Error Messages */
+  .message {
+    font-size: 0.9rem;
+    margin-top: 10px;
+    padding: 8px;
+    border-radius: 8px;
+  }
+  
+  .success {
+    background: rgba(0, 255, 0, 0.2);
+    color: #00ff00;
+  }
+  
+  .error {
+    background: rgba(255, 0, 0, 0.2);
+    color: #ff4d4d;
+  }
+  
