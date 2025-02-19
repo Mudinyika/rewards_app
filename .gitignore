@@ -9,3 +9,4 @@ react_build/
 config.py
 bcrypt_hash.py
 test_allocation_system.py
+node_modules/
