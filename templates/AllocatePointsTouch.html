@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Touchscreen Point Allocation</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to right, #6dd5ed, #2193b0);
+            color: #333;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center; /* Center everything */
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden; /* Prevent scrolling */
+        }
+
+        h1 {
+            color: #444;
+        }
+
+        .operator-info {
+            text-align: left; /* Align text to the left */
+            position: absolute;
+            top: 1%;
+            left: 5%;
+            font-size: 1rem;
+        }
+
+
+        .container {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            width: 90%;
+            max-width: 1000px;
+            margin-top: 2rem;
+        }
+
+        .form-section {
+            flex: 1;
+            text-align: left;
+            max-width: 300px;
+            padding-right: 1rem; /* Increased space between fields and keypad */
+        }
+
+        input, select {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.5rem;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            text-align: center;
+            touch-action: manipulation;
+        }
+
+        /* Modal Styling */
+         /* Modal Background */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.6); /* Darker overlay for better visibility */
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Modal Box */
+    .modal-content {
+        background: white;
+        padding: 25px;
+        border-radius: 12px;
+        text-align: center;
+        width: 90%;
+        max-width: 500px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+        font-size: 1.4rem; /* Bigger text */
+    }
+
+    /* Modal Title */
+    .modal h2 {
+        font-size: 2rem;
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    /* User Info Text */
+    .modal p {
+        font-size: 1.3rem;
+        margin: 10px 0;
+    }
+
+    /* Buttons Container */
+    .modal-buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+        gap: 15px;
+    }
+
+    /* General Button Styles */
+    .modal-buttons button {
+        flex: 1;
+        padding: 20px; /* Bigger tap area */
+        font-size: 1.5rem; /* Bigger text */
+        border-radius: 12px;
+        border: none;
+        color: white;
+        cursor: pointer;
+        transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    /* Confirm Button */
+    .modal-buttons .confirm {
+        background-color: green;
+    }
+
+    .modal-buttons .confirm:hover {
+        background-color: darkgreen;
+    }
+
+    .modal-buttons .confirm:active {
+        background-color: limegreen;
+        transform: scale(0.95);
+    }
+
+    /* Cancel Button */
+    .modal-buttons .cancel {
+        background-color: red;
+    }
+
+    .modal-buttons .cancel:hover {
+        background-color: darkred;
+    }
+
+    .modal-buttons .cancel:active {
+        background-color: tomato;
+        transform: scale(0.95);
+    }
+
+        .transaction-buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 1rem;
+    }
+
+    .transaction-btn {
+        width: 48%;
+        padding: 1rem;
+        font-size: 1.2rem;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        background-color: grey;
+        color: white;
+        transition: background 0.3s;
+    }
+
+    .transaction-btn.active-add {
+        background-color: green;
+    }
+
+    .transaction-btn.active-remove {
+        background-color: red;
+    }
+
+    .keypad-container {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        padding-left: 1rem; /* Reduce space */
+        margin-left: auto;
+        margin-right: auto; /* Center keypad */
+        transform: scale(0.95); /* Slightly reduce size to fit */
+        gap: 4rem; /* Add spacing between keypad and logout */
+    }
+ 
+    .keypad {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr); /* 4 columns */
+        grid-template-rows: repeat(4, 1fr); /* 4 rows */
+        gap: 14px;
+        width: 100%; /* Adjust width for proper button spacing */
+        margin-top: 1rem;
+        max-width: 350px; /* Prevent it from getting too big */
+        aspect-ratio: 4 / 4; /* Keep square proportions */
+    
+    }
+
+    .keypad button {
+        font-size: min(2.5rem, 5vw); /* Scale text based on viewport */
+        padding: min(2rem, 4vw); /* Scale button padding */
+        width: 100%; /* Keep uniform width */
+        max-width: 100px; /* Prevent oversized buttons */
+        aspect-ratio: 1 / 1; /* Keep buttons square */
+        height: 90%;
+        border-radius: 10px;
+        background-color: #333;
+        color: white;
+        border: none;
+        cursor: pointer;
+        transition: background 0.2s ease;
+        
+    }
+
+
+    .keypad button:active {
+        background-color: blue !important; /* Flash effect when pressed */
+    }
+
+    /* Special button positions */
+    .keypad .enter {
+        background-color: green;
+        grid-row: span 2; /* Make Enter button span vertically */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 0;
+    }
+
+    .vertical-text {
+        font-size: 1.8rem; /* Adjust text size */
+        line-height: 1.2; /* Control spacing between letters */
+        display: block;
+        text-transform: uppercase;
+        writing-mode: vertical-rl;  /* Rotates text to vertical */
+        text-orientation: upright;  /* Ensures letters stay upright */
+    }
+
+
+    .keypad .clear {
+        background-color: red;
+    }
+
+    .keypad button[data-key="0"] {
+        grid-column: span 2; /* Make 0 span 2 columns */
+    }
+
+    /* Placeholder for alignment */
+    .placeholder {
+        visibility: hidden;
+    }
+
+        /* Logout Button */
+        .logout-btn {
+            background-color: #d9534f;
+            color: white;
+            padding: 1rem;
+            font-size: 1.5rem;
+            width: 100%;
+            max-width: 350px;
+            border: none;
+            border-radius: 10px;
+            margin-top: 1rem;
+            cursor: pointer;
+        }
+
+        .logout-btn:hover {
+            background-color: #c9302c;
+        }
+
+        /* Success Message */
+    .success-message {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #28a745;
+        color: white;
+        font-size: 1.8rem;
+        padding: 20px 40px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+        text-align: center;
+        z-index: 2000;
+    }
+    </style>
+</head>
+<body>
+
+<div class="operator-info">
+    <h1>Touchscreen Point Allocation</h1>
+    <p><strong>Operator:</strong> {{ operator_name }}</p>
+    <p><strong>Till Number:</strong> {{ till_number }}</p>
+</div>
+    
+
+<div class="container">
+    <!-- Left: Input Fields -->
+    <div class="form-section">
+        <label>User ID</label>
+        <input type="text" id="userId" readonly onclick="setActiveField('userId')">
+
+        <label>Points</label>
+        <input type="text" id="points" readonly onclick="setActiveField('points')">
+
+        <label>Transaction Type</label>
+    <div class="transaction-buttons">
+    <button class="transaction-btn" id="addButton" onclick="setTransactionType('add')">Add Points</button>
+    <button class="transaction-btn" id="removeButton" onclick="setTransactionType('remove')">Remove Points</button>
+    </div>
+
+<!-- Hidden field to store selected transaction type -->
+    <input type="hidden" id="transactionType" value="">
+        <!-- Hidden fields to store user info -->
+        <input type="hidden" id="storedUserName">
+        <input type="hidden" id="storedLastTransaction">
+        <input type="hidden" id="storedCurrentPoints">
+
+    </div>
+
+    <!-- Right: Keypad & Logout -->
+    <div class="keypad-container">
+        <div class="keypad">
+            <button onclick="keyPress('7')" data-key="7">7</button>
+            <button onclick="keyPress('8')" data-key="8">8</button>
+            <button onclick="keyPress('9')" data-key="9">9</button>
+            <button onclick="clearInput()" class="clear" data-key="-">C</button>
+        
+            <button onclick="keyPress('4')" data-key="4">4</button>
+            <button onclick="keyPress('5')" data-key="5">5</button>
+            <button onclick="keyPress('6')" data-key="6">6</button>
+            <button class="placeholder"></button> <!-- Placeholder for alignment -->
+        
+            <button onclick="keyPress('1')" data-key="1">1</button>
+            <button onclick="keyPress('2')" data-key="2">2</button>
+            <button onclick="keyPress('3')" data-key="3">3</button>
+            <button class="enter" onclick="openModal()" data-key="Enter" rowspan="2">
+                <span class="vertical-text">Enter</span>
+            </button>            
+        
+            <button onclick="keyPress('0')" data-key="0" colspan="2">0</button>
+            <button onclick="keyPress('.')" data-key=".">.</button>
+        </div>
+        
+
+        <!-- Logout Button Below Keypad -->
+        <form action="/logout" method="POST">
+            <button type="submit" class="logout-btn">Logout</button>
+        </form>
+    </div>
+</div>
+
+<!-- Live Preview Modal -->
+<div id="previewModal" class="modal">
+    <div class="modal-content">
+        <h2>Confirm Allocation</h2>
+        <p><strong>User ID:</strong> <span id="previewUserId"></span></p>
+        <p><strong>Name:</strong> <span id="previewUserName"></span></p>
+        <p><strong>Current Points:</strong> <span id="previewCurrentPoints"></span></p>
+        <p><strong>Last Transaction:</strong> <span id="previewLastTransaction"></span></p>
+        <p><strong>Points:</strong> <span id="previewPoints"></span></p>
+        <p><strong>Transaction Type:</strong> <span id="previewType"></span></p>
+
+        <div class="modal-buttons">
+            <button class="confirm" onclick="allocatePoints()">Confirm</button>
+            <button class="cancel" onclick="closeModal()">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<!-- Success Message -->
+<div id="successMessage" class="success-message"></div>
+
+<script>
+    let activeField = "points"; 
+
+    function setActiveField(fieldId) {
+        activeField = fieldId;
+    }
+
+    function keyPress(value) {
+        document.getElementById(activeField).value += value;
+    }
+
+    function clearInput() {
+        document.getElementById(activeField).value = "";
+    }
+
+    async function fetchUserDetails() {
+    const userId = document.getElementById('userId').value.trim();
+    if (!userId) {
+        resetUserInfo();
+        return;
+    }
+
+    try {
+        const response = await fetch(`/api/users/${userId}`);
+        const data = await response.json();
+
+        console.log("Fetched User Data:", data);  // Debugging log
+
+        if (response.ok) {
+            // Store user details
+            document.getElementById('storedUserName').value = data.name;
+            document.getElementById('storedLastTransaction').value = data.last_transaction || 'N/A';
+            document.getElementById('storedCurrentPoints').value = data.points;
+
+            console.log("User info stored:", {
+                name: document.getElementById('storedUserName').value,
+                last_transaction: document.getElementById('storedLastTransaction').value,
+                points: document.getElementById('storedCurrentPoints').value
+            });  // ✅ Debugging log
+        } else {
+            alert(`Error fetching user details: ${data.error}`);
+            resetUserInfo();
+        }
+    } catch (error) {
+        console.error('Error fetching user details:', error);
+        resetUserInfo();
+    }
+}
+
+function keyPress(value) {
+        let btn = document.querySelector(`button[data-key="${value}"]`);
+        if (btn) {
+            btn.classList.add("flash"); // Add flash effect
+            setTimeout(() => btn.classList.remove("flash"), 200); // Remove after 0.2s
+        }
+        document.getElementById(activeField).value += value;
+    }
+
+function setTransactionType(type) {
+        document.getElementById("transactionType").value = type;
+        document.getElementById("addButton").classList.remove("active-add", "active-remove");
+        document.getElementById("removeButton").classList.remove("active-add", "active-remove");
+
+        if (type === "add") {
+            document.getElementById("addButton").classList.add("active-add");
+        } else {
+            document.getElementById("removeButton").classList.add("active-remove");
+        }
+    }
+
+async function openModal() {
+    await fetchUserDetails();  //  Ensure user details are fetched before opening modal
+
+    console.log("Opening Modal - Stored User Info:", {
+        name: document.getElementById('storedUserName').value,
+        last_transaction: document.getElementById('storedLastTransaction').value,
+        points: document.getElementById('storedCurrentPoints').value
+    });
+
+    document.getElementById('previewUserId').innerText = document.getElementById('userId').value;
+    document.getElementById('previewUserName').innerText = document.getElementById('storedUserName').value || 'N/A';
+    document.getElementById('previewLastTransaction').innerText = document.getElementById('storedLastTransaction').value || 'N/A';
+    document.getElementById('previewCurrentPoints').innerText = document.getElementById('storedCurrentPoints').value || 'N/A';
+    document.getElementById('previewPoints').innerText = document.getElementById('points').value;
+    document.getElementById('previewType').innerText = document.getElementById('transactionType').value;
+    document.getElementById('previewModal').style.display = 'flex';
+}
+
+
+
+
+    function closeModal() {
+        document.getElementById('previewModal').style.display = 'none';
+    }
+
+    async function allocatePoints() {
+        const userId = document.getElementById('userId').value.trim();
+        const points = document.getElementById('points').value.trim();
+        const transactionType = document.getElementById('transactionType').value;
+        const userName = document.getElementById('storedUserName').value; // Get stored name
+
+        if (!userId || !points) {
+            alert('Please fill out all fields.');
+            return;
+        }
+
+        try {
+            const payload = {
+                user_id: userId,
+                points: parseFloat(points),
+                transaction_type: transactionType,
+                bypass_admin_key: true  
+            };
+
+            const response = await fetch('/api/allocate-points', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                showSuccessMessage(points, userName, transactionType);
+                closeModal();
+                setTimeout(resetForm, 2000); // Reset form after 2 seconds
+            } else {
+                alert(`Error: ${data.error}`);
+            }
+        } catch (error) {
+            console.error('Error allocating points:', error);
+        }
+    }
+
+
+function showSuccessMessage(points, userName, transactionType) {
+        const messageBox = document.getElementById('successMessage');
+        const action = transactionType === "add" ? "Added to" : "Removed from";
+        messageBox.innerText = `✅ ${points} Points ${action} ${userName}`;
+        messageBox.style.display = "block";
+
+        setTimeout(() => {
+            messageBox.style.display = "none";
+        }, 2000);
+    }
+
+    document.addEventListener("keydown", function(event) {
+    const key = event.key;
+    const modal = document.getElementById("previewModal");
+
+    if (/^\d$/.test(key)) {
+        // If a number key (0-9) is pressed, enter it into the active field
+        keyPress(key);
+    } else if (key === "Enter") {
+        if (modal.style.display === "flex") {
+            // If modal is open, confirm allocation
+            allocatePoints();
+        } else {
+            // Otherwise, open the modal
+            openModal();
+        }
+    } else if (key === "Escape") {
+        // Pressing Esc works like the "C" (Clear) button on the keypad
+        clearInput();
+    } else if (key === "-") {
+        if (modal.style.display === "flex") {
+            // If modal is open, cancel (close modal)
+            closeModal();
+        }
+    } else if (key === "Tab") {
+        // Prevent default tabbing behavior
+        event.preventDefault();
+        switchFocus();
+    }
+});
+
+// Function to switch focus between fields and buttons
+function switchFocus() {
+    const elements = ["userId", "points", "addButton", "removeButton"];
+    let currentIndex = elements.indexOf(activeField);
+
+    if (currentIndex === -1 || currentIndex === elements.length - 1) {
+        // If not found or at the last element, go back to the first
+        activeField = elements[0];
+    } else {
+        // Move to the next element in the sequence
+        activeField = elements[currentIndex + 1];
+    }
+
+    if (activeField === "addButton" || activeField === "removeButton") {
+        document.getElementById(activeField).focus();
+    } else {
+        document.getElementById(activeField).focus();
+    }
+}
+
+    
+// Function to clear fields
+function resetForm() {
+    document.getElementById('userId').value = "";
+    document.getElementById('points').value = "";
+    document.getElementById('storedUserName').value = "";
+    document.getElementById('storedLastTransaction').value = "";
+    document.getElementById('storedCurrentPoints').value = "";
+    document.getElementById("addButton").classList.remove("active-add");
+    document.getElementById("removeButton").classList.remove("active-remove");
+}
+
+</script>
+
+</body>
+</html>
