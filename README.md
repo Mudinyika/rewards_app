@@ -1,6 +1,9 @@
-🏪 Supermarket Points Management System
-📌 Overview
-This is a Full-Stack Supermarket Points Management System built with Flask (Backend) + React (Frontend). It enables:
+ Supermarket Points Management System
+
+ Overview
+
+ This is a Full-Stack Supermarket Points Management System built with Flask (Backend) + React (Frontend). 
+ It enables:
 - Admins to allocate/revoke points and manage users.
 - Till Operators to process transactions.
 - Superusers to oversee the entire system.
