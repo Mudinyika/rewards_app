@@ -1,0 +1,11 @@
+.env
+__pycache__/
+flask_session/
+certs/
+react_build/
+*.pyc
+*.log
+*.sqlite3
+config.py
+bcrypt_hash.py
+test_allocation_system.py
