@@ -31,6 +31,10 @@ const Sidebar = ({ setLoggedIn }) => {
     setIsUsersOpen(!isUsersOpen);
   };
 
+  const closeUsersMenu = () => {
+    setIsUsersOpen(false);
+  };
+
   const handleLogout = async () => {
     try {
       const response = await fetch(`${BASE_URL}/api/logout`, {
@@ -57,7 +61,7 @@ const Sidebar = ({ setLoggedIn }) => {
         My App
       </h1>
       <nav className="flex-1 mt-4 space-y-4">
-        <Link to="/" className={`nav-item ${isActive("/") ? "active" : ""}`}>
+        <Link to="/" className={`nav-item ${isActive("/") ? "active" : ""}`} onClick={closeUsersMenu}>
           Dashboard
         </Link>
 
@@ -70,40 +74,44 @@ const Sidebar = ({ setLoggedIn }) => {
         </button>
         {isUsersOpen && (
           <ul className="submenu ml-4 mt-2 space-y-2">
-            <li>
-              <Link to="/add-user" className={`block ${isActive("/add-user") ? "active" : ""}`}>
-                Add User
-              </Link>
-            </li>
-            <li>
-              <Link to="/edit-user" className={`block ${isActive("/edit-user") ? "active" : ""}`}>
-                Edit User
-              </Link>
-            </li>
-            <li>
-              <Link to="/view-user" className={`block ${isActive("/view-user") ? "active" : ""}`}>
-                View User
-              </Link>
-            </li>
-          </ul>
+          <li>
+            <Link to="/add-user" className={`block ${isActive("/add-user") ? "active" : ""}`}>
+              Add User
+            </Link>
+          </li>
+          <li>
+            <Link to="/edit-user" className={`block ${isActive("/edit-user") ? "active" : ""}`}>
+              Edit User
+            </Link>
+          </li>
+          <li>
+            <Link to="/view-user" className={`block ${isActive("/view-user") ? "active" : ""}`}>
+              View User
+            </Link>
+          </li>
+        </ul>
+                
         )}  
         </div>
 
-        <Link to="/analytics" className={`nav-item ${isActive("/analytics") ? "active" : ""}`}>
+        <Link to="/analytics" className={`nav-item ${isActive("/analytics") ? "active" : ""}`} onClick={closeUsersMenu}>
           Analytics
         </Link>
-        <Link to="/allocate-points" className={`nav-item ${isActive("/allocate-points") ? "active" : ""}`}>
+        <Link to="/allocate-points" className={`nav-item ${isActive("/allocate-points") ? "active" : ""}`} onClick={closeUsersMenu}>
           Allocate Points
         </Link>
-        <Link to="/till-operators" className={`nav-item ${isActive("/till-operators") ? "active" : ""}`}>
+        <Link to="/till-operators" className={`nav-item ${isActive("/till-operators") ? "active" : ""}`} onClick={closeUsersMenu}>
           Admin & Till
         </Link>
-        <Link to="/search" className={`nav-item ${isActive("/search") ? "active" : ""}`}>
+        <Link to="/search" className={`nav-item ${isActive("/search") ? "active" : ""}`} onClick={closeUsersMenu}>
           Search
         </Link>
 
         <button
-          onClick={() => (role === "super" ? navigate("/manage-permissions") : alert("Access Denied"))}
+          onClick={() => {
+            closeUsersMenu(); // ✅ Close the Users menu
+            role === "super" ? navigate("/manage-permissions") : alert("Access Denied");
+          }}
           className={`nav-button ${isActive("/manage-permissions") ? "active" : ""}`}
         >
           Manage Permissions
