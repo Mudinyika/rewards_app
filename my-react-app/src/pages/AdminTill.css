@@ -99,33 +99,47 @@
     background: rgba(255, 255, 255, 0.2);
 }
 
-/* 🛠 Edit & Delete Buttons */
-.action-buttons button {
-    margin: 5px;
-    padding: 8px 12px;
+/* 📝 Edit (Pencil) Icon */
+.edit-icon {
+    background: none;
     border: none;
-    border-radius: 6px;
+    font-size: 1.2rem;
     cursor: pointer;
-    transition: 0.3s;
+    float: right;
 }
 
-.edit-button {
-    background: #4caf50;
+/* ✅ Buttons inside modal */
+.modal-buttons {
+    margin-top: 15px;
+}
+
+.save-button {
+    background: #4CAF50;
     color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
 }
 
-.edit-button:hover {
+.save-button:hover {
     background: #45a049;
 }
 
 .delete-button {
     background: #f44336;
     color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
 .delete-button:hover {
     background: #d32f2f;
 }
+
 
 /* 🔔 Modal Styling */
 .dialog-overlay {
@@ -145,3 +159,21 @@
     left: 50%;
     transform: translate(-50%, -50%);
 }
+
+/* 🌟 Modal Styling */
+.user-details-modal {
+    text-align: left;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    backdrop-filter: blur(5px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* 🌟 Ensure text inside the modal is visible */
+.user-details-modal p {
+    font-size: 1rem;
+    color: black;  /* ✅ Ensures visibility */
+    margin: 8px 0;
+}
+
