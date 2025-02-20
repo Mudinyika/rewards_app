@@ -99,33 +99,33 @@
 
 .modal-buttons {
     display: flex;
-    justify-content: space-between; /* Ensures buttons align properly */
-    gap: 10px; /* Adds spacing between buttons */
+    justify-content: space-between; /* ✅ Ensures buttons stay in one row */
+    gap: 10px; /* ✅ Adds even spacing */
     margin-top: 15px;
+    width: 100%; /* ✅ Ensures uniform width */
 }
 
-.edit-button, .save-button, .delete-button, .modal-close {
+/* 🎨 Apply the same styles to all buttons */
+.modal-buttons button {  
     padding: 10px 15px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-size: 1rem;
-}
-
-.edit-button {
-    background-color: #ffcc00; 
+    width: 100px; /* ✅ Same width */
+    height: 40px; /* ✅ Same height */
+    text-align: center;
+    flex-grow: 1; /* ✅ Ensures buttons expand evenly */
+    background-color: #ffcc00; /* ✅ Uniform grey color */
     color: black;
 }
 
-.save-button {
-    background-color: #4CAF50;
-    color: white;
+/* 🛠 Add hover effect */
+.modal-buttons button:hover {
+    background-color: #b3b3b3; /* Slightly darker grey */
 }
 
-.delete-button {
-    background-color: #f44336; 
-    color: white;
-}
+
 
 .modal-close {
     background-color: #ccc; 
@@ -152,15 +152,36 @@
     transform: translate(-50%, -50%);
 }
 
-/*  Modal Styling */
-.user-details-modal {
-    text-align: left;
-    padding: 10px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
-    backdrop-filter: blur(5px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+/*  Ensure modal title is visible */
+.user-details-modal h2, 
+.user-details-modal .dialog-title {
+    color: black;  /*  Ensures visibility */
+    font-size: 1.3rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 10px;
 }
+
+/*  Style input fields inside the modal */
+.user-details-modal input {
+    width: 100%; /*  Makes inputs stretch properly */
+    padding: 8px;
+    border: 1px solid #ccc; /*  Adds subtle border for visibility */
+    border-radius: 5px;
+    font-size: 1rem;
+    background-color: white; /*  Ensures contrast */
+    color: black; /*  Text is clearly visible */
+    text-align: center; /*  Keeps input text aligned */
+}
+
+
+/*  Improve focus effect */
+.user-details-modal input:focus {
+    outline: none;
+    border-color: #ffcc00; /*  Highlights input field on focus */
+    box-shadow: 0 0 5px rgba(255, 204, 0, 0.7);
+}
+
 
 /*  Ensure text inside the modal is visible */
 .user-details-modal p {

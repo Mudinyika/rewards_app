@@ -273,17 +273,12 @@ const AdminTill = () => {
           <Dialog.Content className="dialog-content user-details-modal">
             <Dialog.Title>User Details</Dialog.Title>
 
-            {/* ✅ Define Permissions */}
             {(() => {
               const isSuperUser = selectedUser.role === "super";
               const canEditOrDelete = loggedInRole === "super" || (loggedInRole === "admin" && !isSuperUser);
 
               return (
                 <>
-                  {/* ✅ Show edit icon only if Super User or Admin */}
-                  {canEditOrDelete && !editing && (
-                    <button className="edit-icon" onClick={() => setEditing(true)}></button>
-                  )}
                   <p><strong>Name:</strong> 
                     {editing ? (
                       <input 
@@ -318,7 +313,8 @@ const AdminTill = () => {
                   </p>
 
                   <p><strong>ID Number:</strong> {selectedUser.admin_id_number}  {/* 🚫 Not Editable */}</p>
-                  {/*  Modal Action Buttons - Edit, Save, Delete, Close */}
+
+                  {/* ✅ Modal Action Buttons - Edit, Save, Delete, Close */}
                   <div className="modal-buttons">
                     {!editing && canEditOrDelete && (
                       <button className="edit-button" onClick={() => setEditing(true)}>Edit</button>
@@ -330,9 +326,10 @@ const AdminTill = () => {
                         <button className="delete-button" onClick={handleDeleteUser}>Delete</button>
                       </>
                     )}
-                    <button className="modal-close" onClick={() => setShowUserModal(false)}>Close</button>
+                    
+                    <button onClick={() => setShowUserModal(false)}>Close</button>
                   </div>
-               </>
+                </>
               );
             })()}
           </Dialog.Content>
