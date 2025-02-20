@@ -81,7 +81,9 @@ Contributors
 Built by [Mudiwa L. Nyikavaranda].
 
 License
-This project is MIT licensed. Feel free to use and modify.
+This software is proprietary and requires a valid license for use.
+Unauthorized redistribution, resale, or modification is strictly prohibited.
+For licensing inquiries, contact mudiwanyikavaranda@gmail.com.
 
 Feedback & Contact
 For inquiries, contact: mudiwanyikavaranda@gmail.com
