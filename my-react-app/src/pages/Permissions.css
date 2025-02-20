@@ -98,7 +98,6 @@ body.modal-open {
     overflow: hidden; /* ✅ Prevents scrolling */
 }
 
-
 .modal-close {
     background: red;
     color: white;
