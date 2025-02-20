@@ -1,9 +1,9 @@
-/* 🌟 Two-Column Layout */
+/*  Two-Column Layout */
 .admin-till-container {
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    min-height: 100vh; /* 🔥 Ensures background covers full page */
+    min-height: 100vh; /*  Ensures background covers full page */
     padding: 30px 50px; /* Adjust padding as needed */
     background: linear-gradient(135deg, #1e3c72, #2a5298);
     color: white;
@@ -11,13 +11,11 @@
     overflow: hidden; /* Prevents accidental scroll cutting */
 }
 
-
-
-/* ✅ Left Column - Form Section */
+/*  Left Column - Form Section */
 .admin-form {
     flex: 1;
     max-width: 350px;
-    background: rgba(255, 255, 255, 0.1); /* ✅ Glass Effect */
+    background: rgba(255, 255, 255, 0.1); /* Glass Effect */
     padding: 20px;
     border-radius: 10px;
     backdrop-filter: blur(10px);
@@ -25,7 +23,7 @@
     text-align: center;
 }
 
-/* 📝 Input Fields */
+/*  Input Fields */
 .admin-form label {
     font-size: 1rem;
     font-weight: bold;
@@ -42,17 +40,17 @@
     border: none;
     border-radius: 8px;
     font-size: 1rem;
-    background: rgba(255, 255, 255, 0.2); /* ✅ Glass effect */
+    background: rgba(255, 255, 255, 0.2); 
     color: var(--color-white);
     text-align: center;
 }
 
-/* 🔘 Select Dropdown */
+
 .admin-form select {
     cursor: pointer;
 }
 
-/* 🚀 Submit Button */
+
 .submit-button {
     width: 100%;
     background: #ffcc00;
@@ -71,7 +69,7 @@
     background: #ffdb4d;
 }
 
-/* ✅ Right Column - User List */
+
 .user-list {
     flex: 2;
     background: rgba(255, 255, 255, 0.1);
@@ -82,7 +80,7 @@
     width: 100%;
 }
 
-/* 🎯 User Table */
+
 .user-list table {
     width: 100%;
     border-collapse: collapse;
@@ -99,49 +97,43 @@
     background: rgba(255, 255, 255, 0.2);
 }
 
-/* 📝 Edit (Pencil) Icon */
-.edit-icon {
-    background: none;
-    border: none;
-    font-size: 1.2rem;
-    cursor: pointer;
-    float: right;
-}
-
-/* ✅ Buttons inside modal */
 .modal-buttons {
+    display: flex;
+    justify-content: space-between; /* Ensures buttons align properly */
+    gap: 10px; /* Adds spacing between buttons */
     margin-top: 15px;
 }
 
-.save-button {
-    background: #4CAF50;
-    color: white;
-    padding: 10px;
+.edit-button, .save-button, .delete-button, .modal-close {
+    padding: 10px 15px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    margin-right: 10px;
+    font-size: 1rem;
 }
 
-.save-button:hover {
-    background: #45a049;
+.edit-button {
+    background-color: #ffcc00; 
+    color: black;
+}
+
+.save-button {
+    background-color: #4CAF50;
+    color: white;
 }
 
 .delete-button {
-    background: #f44336;
+    background-color: #f44336; 
     color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
 }
 
-.delete-button:hover {
-    background: #d32f2f;
+.modal-close {
+    background-color: #ccc; 
+    color: black;
 }
 
 
-/* 🔔 Modal Styling */
+/*  Modal Styling */
 .dialog-overlay {
     background: rgba(0, 0, 0, 0.5);
     position: fixed;
@@ -160,7 +152,7 @@
     transform: translate(-50%, -50%);
 }
 
-/* 🌟 Modal Styling */
+/*  Modal Styling */
 .user-details-modal {
     text-align: left;
     padding: 10px;
@@ -170,7 +162,7 @@
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-/* 🌟 Ensure text inside the modal is visible */
+/*  Ensure text inside the modal is visible */
 .user-details-modal p {
     font-size: 1rem;
     color: black;  /* ✅ Ensures visibility */

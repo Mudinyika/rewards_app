@@ -282,7 +282,7 @@ const AdminTill = () => {
                 <>
                   {/* ✅ Show edit icon only if Super User or Admin */}
                   {canEditOrDelete && !editing && (
-                    <button className="edit-icon" onClick={() => setEditing(true)}>✏️</button>
+                    <button className="edit-icon" onClick={() => setEditing(true)}></button>
                   )}
                   <p><strong>Name:</strong> 
                     {editing ? (
@@ -318,16 +318,21 @@ const AdminTill = () => {
                   </p>
 
                   <p><strong>ID Number:</strong> {selectedUser.admin_id_number}  {/* 🚫 Not Editable */}</p>
-                  {/* ✅ Show "Save" and "Delete" buttons only if editing is enabled */}
-                  {canEditOrDelete && editing && (
-                    <div className="modal-buttons">
-                      <button className="save-button" onClick={handleSaveEdit}>Save</button>
-                      <button className="delete-button" onClick={handleDeleteUser}>Delete</button>
-                    </div>
-                  )}
+                  {/*  Modal Action Buttons - Edit, Save, Delete, Close */}
+                  <div className="modal-buttons">
+                    {!editing && canEditOrDelete && (
+                      <button className="edit-button" onClick={() => setEditing(true)}>Edit</button>
+                    )}
 
-                  <button onClick={() => setShowUserModal(false)} className="modal-close">Close</button>
-                </>
+                    {editing && canEditOrDelete && (
+                      <>
+                        <button className="save-button" onClick={handleSaveEdit}>Save</button>
+                        <button className="delete-button" onClick={handleDeleteUser}>Delete</button>
+                      </>
+                    )}
+                    <button className="modal-close" onClick={() => setShowUserModal(false)}>Close</button>
+                  </div>
+               </>
               );
             })()}
           </Dialog.Content>
