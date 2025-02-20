@@ -28,9 +28,13 @@ const Sidebar = ({ setLoggedIn }) => {
   }, []);
 
   const toggleUsers = () => {
-    setIsUsersOpen(!isUsersOpen);
+    if (isUsersOpen) {
+      setTimeout(() => setIsUsersOpen(false), 100); // ⏳ Short delay
+    } else {
+      setIsUsersOpen(true);
+    }
   };
-
+  
   const closeUsersMenu = () => {
     setIsUsersOpen(false);
   };

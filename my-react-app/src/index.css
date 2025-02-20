@@ -50,29 +50,86 @@ body {
 
 
 /* Sidebar item styles */
+/* ✅ Sidebar Nav Item (For Links Only) */
 .nav-item {
-  padding: 1rem;
-  color: var(--color-white);
-  text-decoration: none;
-  font-size: 1rem;
-  transition: background-color 0.3s;
-  border-radius: 4px;
   display: block;
+  padding: 1rem;
+  text-decoration: none;
+  color: var(--color-white);
+  background-color: transparent;
+  transition: background 0.3s ease;
+  border-radius: 4px;
 }
 
-/* Sidebar item hover effect */
-.nav-item:hover {
-  background-color: #1d4ed8;
+/* ✅ Highlight active page */
+.nav-item.active  {
+  background-color: #ffcc00; /* ✅ Yellow highlight for active link */
+  color: black;
+  font-weight: bold;
 }
 
-/* Submenu for Users (hidden by default, visible on click) */
+/* ✅ Sidebar Buttons (Users, Manage Permissions, Logout) */
+.nav-button {
+  display: block;
+  padding: 1rem;
+  width: 100%;
+  text-align: left;
+  background-color: transparent;
+  border: none;
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.nav-button.active {
+  background-color: #ffcc00; /* ✅ Yellow highlight for active link */
+  color: black;
+  font-weight: bold;
+}
+
+
+/* ✅ Button hover effect */
+.nav-button:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* ✅ Logout button red */
+.logout-button {
+  color: red;
+  font-weight: bold;
+}
+
+/* ✅ Logout button hover */
+.logout-button:hover {
+  background-color: rgba(255, 0, 0, 0.2);
+}
+
+/* 🔹 Submenu Items - Ensure Visibility */
+.submenu a {
+  color: white; /* ✅ Ensures submenu items are clearly visible */
+  display: block;
+  padding: 10px;
+  text-decoration: none;
+  border-radius: 4px;
+}
+
+/* 🔹 Submenu Hover Effect */
+.submenu a:hover {
+  background-color: rgba(255, 255, 255, 0.2); /* ✅ Light background on hover */
+}
+
+/* 🔥 Active Submenu Item - Keep it Highlighted */
+.submenu a.active {
+  background-color: #ffcc00; /* ✅ Matches main active highlight */
+  color: black;
+  font-weight: bold;
+}
+
 .submenu {
-  padding-left: 1rem; /* Indent submenu items */
+  min-height: 120px; /* ✅ Ensures submenu space stays reserved */
+  transition: min-height 0.2s ease-in-out; /* ✅ Smooth transition */
 }
 
-.submenu .nav-item {
-  padding-left: 1.5rem; /* Indent submenu items further */
-}
 
 /* Utility classes */
 .text-white {
