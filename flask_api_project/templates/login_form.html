@@ -5,49 +5,162 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Till Operator Login</title>
   <style>
-    .login-container {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
+    /* Page Background */
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(to right, #6dd5ed, #2193b0);
+      margin: 0;
+      padding: 0;
       display: flex;
       justify-content: center;
       align-items: center;
-      background-color: rgba(0, 0, 0, 0.5);
-      z-index: 10;
+      height: 100vh;
     }
-    .login-form {
-      background-color: white;
-      padding: 20px;
+    /* Login Container */
+    .login-container {
+      width: 350px;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      border: 1px solid #2193b0;
+    }
+    h2 {
+      color: #2193b0;
+      margin-bottom: 20px;
+      font-size: 1.8em;
+    }
+    label {
+      color: #333;
+      font-weight: bold;
+      display: block;
+      text-align: left;
+      margin-bottom: 5px;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      font-size: 1em;
+      border: 2px solid #ccc;
       border-radius: 8px;
-      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+      transition: border-color 0.3s;
+    }
+    input:focus, select:focus {
+      border-color: #2193b0;
+      outline: none;
+    }
+    .checkbox-container {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      margin: 10px 0;
+    }
+    .checkbox-container input {
+      margin-right: 10px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 15px;
+      background: linear-gradient(to bottom, #5cbef9, #2178c2);
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-size: 1.2em;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: linear-gradient(to bottom, #4bb1f0, #1f6da9);
+    }
+    .error {
+      color: red;
+      font-size: 14px;
+      margin-top: 10px;
     }
   </style>
 </head>
 <body>
 
-  <div class="login-container" id="login-container">
-    <div class="login-form">
-      <h2>Enter Till Operator Credentials</h2>
-      <form id="login-form">
-        <label for="till_number">Till Number:</label>
-        <input type="text" id="till_number" name="till_number" required><br><br>
-        
-        <label for="operator_name">Till Operator Name:</label>
-        <input type="text" id="operator_name" name="operator_name" required><br><br>
-        
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required><br><br>
-        
-        <button type="submit">Login</button>
-      </form>
-      <p id="error-message" style="color: red; display: none;">Invalid credentials. Please try again.</p>
-    </div>
-  </div>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="{{ url_for('static', filename='login_ajax.js') }}"></script>
+  <div class="login-container">
+    <h2>Till Operator Login</h2>
+    <form id="loginForm">
+      <label for="till_number">Till Number:</label>
+      <select id="till_number" name="till_number" required>
+        <option value="">Select Till Number</option>
+        <option value="001">Till 001</option>
+        <option value="002">Till 002</option>
+        <option value="003">Till 003</option>
+        <option value="004">Till 004</option>
+        <option value="005">Till 005</option>
+      </select>
 
+      <label for="operator_name">Operator Name:</label>
+      <input type="text" id="operator_name" name="operator_name" required>
+
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" required>
+
+      <div class="checkbox-container">
+        <input type="checkbox" id="use_touch_mode">
+        <label for="use_touch_mode">Use Touch Mode</label>
+      </div>
+
+      <button type="submit">Login</button>
+    </form>
+
+    <p class="error" id="errorMessage"></p>
+  </div>
+
+  <script>
+    document.getElementById("loginForm").addEventListener("submit", function(event) {
+      event.preventDefault(); // Prevent the default form submission
+
+      let till_number = document.getElementById("till_number").value;
+      let operator_name = document.getElementById("operator_name").value;
+      let password = document.getElementById("password").value;
+      let useTouchMode = document.getElementById("use_touch_mode").checked;
+
+      if (!till_number || !operator_name || !password) {
+        document.getElementById("errorMessage").innerText = "All fields are required.";
+        return;
+      }
+
+      // Create a JSON payload
+      let payload = {
+        till_number: till_number,
+        operator_name: operator_name,
+        password: password
+      };
+
+      let url = "/login";
+      if (useTouchMode) {
+        url += "?use_touch_mode=true"; // Append query parameter if checkbox is checked
+      }
+
+      fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          window.location.href = useTouchMode ? "/allocate?mode=touch" : "/allocate_points_page";
+        } else {
+          document.getElementById("errorMessage").innerText = data.error;
+        }
+      })
+      .catch(error => {
+        document.getElementById("errorMessage").innerText = "Login failed. Please try again.";
+      });
+    });
+  </script>
 
 </body>
 </html>
