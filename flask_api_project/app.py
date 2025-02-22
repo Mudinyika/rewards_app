@@ -27,40 +27,40 @@ import json
 import re
 from decimal import Decimal, InvalidOperation
 import os
-from config import config  # ✅ Import the config dictionary
+from config import config  # Import the config dictionary
 from waitress import serve
 
 
 load_dotenv()  # Load environment variables from .env
-print(f"🔍 DEBUG: SQLALCHEMY_DATABASE_URI = {os.getenv('SQLALCHEMY_DATABASE_URI')}")  # Check if it loads
+print(f"DEBUG: SQLALCHEMY_DATABASE_URI = {os.getenv('SQLALCHEMY_DATABASE_URI')}")  # Check if it loads
 
-# ✅ Set Flask environment dynamically from .env
+#  Set Flask environment dynamically from .env
 env = os.getenv("FLASK_ENV", "production")  # Default to production
 
-# ✅ Debugging: Check if the database URI is actually loaded
+#  Debugging: Check if the database URI is actually loaded
 db_uri = os.getenv("SQLALCHEMY_DATABASE_URI")
-print(f"🔍 DEBUG: Loaded SQLALCHEMY_DATABASE_URI = {db_uri}")
+print(f" DEBUG: Loaded SQLALCHEMY_DATABASE_URI = {db_uri}")
 
 if not db_uri:
-    raise RuntimeError("❌ ERROR: SQLALCHEMY_DATABASE_URI is not set! Check your .env file.")
+    raise RuntimeError("ERROR: SQLALCHEMY_DATABASE_URI is not set! Check your .env file.")
 
 
 # Initialize your Flask app and the database object
 app = Flask(__name__, static_folder="react_build")
 
 
-app.config.from_object(config[env])  # ✅ Load production or development config
+app.config.from_object(config[env])  # Load production or development config
 
-# ✅ Initialize Flask Extensions
+# Initialize Flask Extensions
 mail = Mail(app)
 db = SQLAlchemy(app)
 
-# ✅ Setup CORS for security
+# Setup CORS for security
 CORS(app, resources={r"/api/*": {"origins": ["https://192.168.1.197:8443"], "supports_credentials": True}})
 
 
 
-# ✅ Load admin credentials
+# Load admin credentials
 ADMIN_KEY = os.getenv("ADMIN_KEY")
 SUPERUSER_HASHED_PASSWORD = os.getenv("SUPERUSER_HASHED_PASSWORD")
 
@@ -81,7 +81,7 @@ print("Superuser Hashed Password:", hashed_password)
 
 
 def clear_session(preserve_admin=False):
-    print("🧹 clear_session called with preserve_admin =", preserve_admin)
+    print("clear_session called with preserve_admin =", preserve_admin)
     """
     Clears the session data.
 
@@ -96,16 +96,16 @@ def clear_session(preserve_admin=False):
     for key in keys_to_remove:
         session.pop(key, None)
     if preserve_admin:
-        print("🧹 Cleared till operator session data; admin session preserved.")
+        print("Cleared till operator session data; admin session preserved.")
     else:
-        print("🧹 Cleared previous session data.")
+        print("Cleared previous session data.")
 
 
 @app.route("/reset-password-request", methods=["POST"])
 def reset_password_request():
     email = request.form["email"]
 
-    # ✅ Query the database for the user instead of checking 'users'
+    # Query the database for the user instead of checking 'users'
     user = db.session.execute(text("SELECT * FROM users WHERE email = :email"), {"email": email}).fetchone()
 
     if not user:

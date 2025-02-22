@@ -81,11 +81,10 @@ body {
   transition: background 0.3s ease;
 }
 
-.nav-button.active {
-  background-color: #ffcc00; /* ✅ Yellow highlight for active link */
-  color: black;
-  font-weight: bold;
+.nav-item:hover {
+  background-color: rgba(255, 255, 255, 0.2); /* ✅ Same as buttons */
 }
+
 
 
 /* ✅ Button hover effect */
