@@ -46,7 +46,7 @@ class PointHistory(db.Model):
     operator_name = db.Column(db.String(255), nullable=True)
     allocated_by = db.Column(db.String(255), nullable=True)
 
-    # Relationships
+    
     shop = db.relationship("Shop", backref="point_history")
     performed_by = db.relationship("Admin", backref="transactions")  # ✅ Ensure relationship exists
 
