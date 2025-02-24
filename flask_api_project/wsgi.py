@@ -1111,14 +1111,15 @@ def allocate_points():
         
         print(f"🔍 Logging Transaction: User {user_id}, Points {points}, Type {transaction_type}, Till {till_number}, Operator {operator_name}, Admin {allocated_by}")
 
+        performed_by_id = admin_id if admin_id else session.get("operator_id")
 
         # ✅ Insert transaction into `point_history`
         cursor.execute(
             """
             INSERT INTO point_history 
-            (user_id, points, transaction_type, transaction_id, till_number, operator_name, allocated_by, shop_id) 
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-        """,
+            (user_id, points, transaction_type, transaction_id, till_number, operator_name, allocated_by, shop_id, performed_by_id) 
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+            """,
             (
                 user_id,
                 points,
@@ -1128,6 +1129,7 @@ def allocate_points():
                 operator_name,
                 allocated_by,
                 shop_id,
+                performed_by_id,  # ✅ Ensures `None` isn't inserted
             ),
         )
 

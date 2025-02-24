@@ -35,13 +35,20 @@ class PointHistory(db.Model):
     __tablename__ = "point_history"
 
     id = db.Column(db.Integer, primary_key=True)
-    shop_id = db.Column(db.Integer, db.ForeignKey("shops.shop_id"), nullable=False)
-    transaction_type = db.Column(db.String(10), nullable=False)  # "add" or "remove"
-    points = db.Column(db.Integer, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    shop_id = db.Column(db.Integer, db.ForeignKey("shops.shop_id"), nullable=True)
+    performed_by_id = db.Column(db.Integer, db.ForeignKey("admin.id"), nullable=True)  # ✅ Ensure this exists
+    points = db.Column(db.Numeric(10, 2), nullable=False)
+    transaction_type = db.Column(db.Enum("add", "remove"), nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    transaction_id = db.Column(db.String(100), nullable=True)
+    till_number = db.Column(db.String(50), nullable=True)
+    operator_name = db.Column(db.String(255), nullable=True)
+    allocated_by = db.Column(db.String(255), nullable=True)
 
-    shop = db.relationship("Shop", backref=db.backref("point_history", lazy=True))
-
+    # Relationships
+    shop = db.relationship("Shop", backref="point_history")
+    performed_by = db.relationship("Admin", backref="transactions")  # ✅ Ensure relationship exists
 
 class Operator(db.Model):
     __tablename__ = "till_operators"
